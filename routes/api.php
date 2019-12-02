@@ -2,6 +2,10 @@
 
 use Illuminate\Http\Request;
 
+Route::namespace('Api')->group(function () {
+    Route::post('/{partnerid}', 'PartnerController@main');
+});
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
