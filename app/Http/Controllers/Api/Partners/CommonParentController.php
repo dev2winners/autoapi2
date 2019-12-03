@@ -17,9 +17,9 @@ class CommonParentController extends Controller
         $this->partnerModelData = $this->getModelData($extID);
     }
 
-    public function main()
+    public function main($query)
     {
-        echo $this->partnerModelData->login . '    ' . $this->partnerModelData->ext_id;
+        echo $this->partnerModelData->login . '    ' . $this->partnerModelData->ext_id.'  '.$query;
     }
 
     public function getModelData($extID)
@@ -48,4 +48,11 @@ class CommonParentController extends Controller
             return false;
         }
     }
+    
+    /**** Prepare Vars for Guzzle *****/
+    public function prepareUri() {} //override in children
+    public function prepareHeaders() {} //override in children
+    public function prepareQuery(string $query) {} //override in children
+    public function doGuzzle(string $url, array $headers, array $query) {} //override in children
+
 }

@@ -16,7 +16,7 @@ class PartnerController extends Controller
             if ($partner->partnerModelData->ext_id) {
                 if (isset($request->q)) {
                     $query = $request->q;
-                    $partner->main();
+                    $partner->main($query);
                     //echo $query;
                 } else {
                     return response('{"request error":"no query given"}', 404);
