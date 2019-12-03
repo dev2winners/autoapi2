@@ -55,4 +55,14 @@ class CommonParentController extends Controller
     public function prepareQuery(string $query) {} //override in children
     public function doGuzzle(string $url, array $headers, array $query) {} //override in children
 
+    protected function convertPrice(float $price) //
+    {
+        return ceil($this->partnerModelData->price_ratio * $price);
+    }
+
+    protected function convertDeliveryDays(int $deliveryDays) //
+    {
+        return 1 + $deliveryDays;
+    }
+
 }
