@@ -9,6 +9,7 @@ class Services extends Controller
 {
 
     private $partners = [
+        '1' => 'Partkom',
         '2' => 'Berg',
     ];
 
