@@ -19,7 +19,7 @@ class CommonParentController extends Controller
 
     public function main()
     {
-        echo $this->partnerModelData->login;
+        echo $this->partnerModelData->login.'    '.$this->partnerModelData->ext_id;
     }
 
     public function getModelData($extID)

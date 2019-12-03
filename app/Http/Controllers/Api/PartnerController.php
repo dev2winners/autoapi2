@@ -12,11 +12,20 @@ class PartnerController extends Controller
     {
         if ($partnerid) {
             $partner = $services->getPartner($partnerid);
-            $query = $request->q;
-            $partner->main();
-            //echo $query;
+            //var_dump($partner);
+            if ($partner->partnerModelData->ext_id) {
+                if (isset($request->q)) {
+                    $query = $request->q;
+                    $partner->main();
+                    //echo $query;
+                } else {
+                    return response('{"request error":"no query given"}', 404);
+                }
+            } else {
+                return response('{"request error":"partner not found"}', 404);
+            }
         } else {
-            return 'NO PARTNER ID';
+            return response('{"request error":"no partner id given"}', 404);
         }
     }
 }

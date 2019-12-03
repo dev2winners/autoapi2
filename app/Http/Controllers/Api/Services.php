@@ -8,7 +8,7 @@ use App\Partner;
 class Services extends Controller
 {
 
-    public $partners = [
+    private $partners = [
         '2' => 'Berg',
     ];
 
@@ -18,7 +18,7 @@ class Services extends Controller
             $partnerClass = '\App\Http\Controllers\Api\Partners\\' . $this->partners[$partnerid] . 'Controller';
             $partner = new $partnerClass($partnerid);
         } else {
-            $partner = (object) array();
+            $partner = json_decode(json_encode(['partnerModelData' => ['ext_id' => 0]])); //magic ))) recursive translate array to obj
         }
         return $partner;
     }
