@@ -50,10 +50,22 @@ class CommonParentController extends Controller
     }
     
     /**** Prepare Vars for Guzzle *****/
-    public function prepareUri() {} //override in children
+    public function prepareUrl() {} //override in children
+    public function prepareURI() {
+        return '';
+    }
     public function prepareHeaders() {} //override in children
     public function prepareQuery(string $query) {} //override in children
-    public function doGuzzle(string $url, array $headers, array $query) {} //override in children
+    //public function doGuzzle(string $url, string $URI, array $headers, array $query) {} //override in children
+    public function doGuzzle(string $url, string $URI, array $headers, array $query)
+    {
+        $client = new \GuzzleHttp\Client(['base_uri' => $url, 'verify' => false]);
+        $apiResponse = $client->request('GET', $URI, [
+            'query' => $query,
+            'headers' => $headers,
+        ]);
+        return $apiResponse->getBody()->getContents();
+    }
 
     protected function convertPrice(float $price) //
     {

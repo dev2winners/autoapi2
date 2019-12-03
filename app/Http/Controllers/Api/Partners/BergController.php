@@ -9,10 +9,11 @@ class BergController extends CommonParentController
 {
     public function main($query)
     {
-        $url = $this->prepareUri();
+        $url = $this->prepareUrl();
+        $URI = $this->prepareURI();
         $headers = $this->prepareHeaders();
         $queryToGuzzle = $this->prepareQuery($query);
-        $responseFromExtApi = $this->doGuzzle($url, $headers, $queryToGuzzle);
+        $responseFromExtApi = $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
         if (empty(json_decode($responseFromExtApi)->resources)) {
             return '';
         } else {
@@ -21,7 +22,7 @@ class BergController extends CommonParentController
         }
     }
 
-    public function prepareUri()
+    public function prepareUrl()
     {
         return $this->partnerModelData->url;
     }
@@ -39,16 +40,6 @@ class BergController extends CommonParentController
         return [
             'items' => [0 => ['resource_article' => $this->getFirstArticleFromQuery($query)]],
         ];
-    }
-
-    public function doGuzzle(string $url, array $headers, array $query)
-    {
-        $client = new \GuzzleHttp\Client(['base_uri' => $url, 'verify' => false]);
-        $apiResponse = $client->request('GET', '', [
-            'query' => $query,
-            'headers' => $headers,
-        ]);
-        return $apiResponse->getBody()->getContents();
     }
 
     private function responseObjectCreate(array $arrayFromPartnerApi = [], int $indexOfArray = 0): object
