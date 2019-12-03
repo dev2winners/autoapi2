@@ -14,11 +14,16 @@ class CommonParentController extends Controller
 
     public function __construct($extID)
     {
-        $this->partnerModelData = \App\Partner::where('ext_id', $extID)->first();
+        $this->partnerModelData = $this->getModelData($extID);
     }
 
     public function main()
     {
         echo $this->partnerModelData->login;
+    }
+
+    public function getModelData($extID)
+    {
+        return \App\Partner::where('ext_id', $extID)->first();
     }
 }
