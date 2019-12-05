@@ -47,16 +47,40 @@ class PartkomController extends CommonParentController
         return json_encode(json_decode($jsonString, true), JSON_UNESCAPED_UNICODE);
     }
 
+    private function responseObjectCreate(array $arrayFromPartnerApi = [], int $indexOfArray = 0): object
+    {
+        //var_dump($arrayFromPartnerApi);
+        $responseArray['article'] = $arrayFromPartnerApi[$indexOfArray]['number'];
+        $responseArray['brand'] = $arrayFromPartnerApi[$indexOfArray]['maker'];
+        $responseArray['name'] = $arrayFromPartnerApi[$indexOfArray]['makerId'];
+        $responseArray['price'] = $this->convertPrice((float) $arrayFromPartnerApi[$indexOfArray]['price']);
+        $responseArray['quantity'] = $arrayFromPartnerApi[$indexOfArray]['quantity'];
+        $responseArray['delivery_days'] = $this->convertDeliveryDays((int) $arrayFromPartnerApi[$indexOfArray]['expectedDays']);
+        $responseArray['comment'] = '';
+        $responseArray['partner'] = $this->partnerModelData->id;
+
+        $responseObject = (object) $responseArray;
+        return $responseObject;
+    }
+
     public function responseStringCreate(string $jsonFromPartnerApi = ''): string
     {
         
-        $jsonFromPartnerApi = $this->unicodeJsonConvert($jsonFromPartnerApi);
-        $arrayFromPartnerApi = json_decode($jsonFromPartnerApi, true); //
-        $responseArray = $arrayFromPartnerApi;
+        //$jsonFromPartnerApi = $this->unicodeJsonConvert($jsonFromPartnerApi);
+        $jsonFromPartnerApi = file_get_contents(app_path() . '/TEMP/Partkom.json');
+        $arrayOffers = $arrayFromPartnerApi = json_decode($jsonFromPartnerApi, true); //
         
+        //return json_encode($arrayOffers, JSON_UNESCAPED_UNICODE);
+        
+        $responseArray = [];
+        $responseString = '';
+        
+        foreach ($arrayOffers as $key => $value) {
+            $responseArray[] = $this->responseObjectCreate($arrayOffers, $key);
+        }
+
         $responseString = json_encode($responseArray, JSON_UNESCAPED_UNICODE);
-        //return $responseString; 
-        return $jsonFromPartnerApi;
+        return $responseString;
     }
 
 }
