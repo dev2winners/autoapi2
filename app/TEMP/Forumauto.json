@@ -1,0 +1,23 @@
+[{
+        "gid": "24968965S11608023374W308972",
+        "brand": "MILES",
+        "art": "DB78003",
+        "name": "Тяга стабилизатора OPEL ASTRA G\/H\/ZAFIRA A\/B пер.подв.лев\/прав.",
+        "d_deliv": 4,
+        "kr": 1,
+        "num": 50,
+        "price": 278.8,
+        "whse": "MSK-CD"
+    },
+    {
+        "gid": "24968965S11602482260W308972",
+        "brand": "MILES",
+        "art": "DB78003",
+        "name": "Тяга стабилизатора OPEL ASTRA G\/H\/ZAFIRA A\/B пер.подв.лев\/прав.",
+        "d_deliv": 2,
+        "kr": 1,
+        "num": 50,
+        "price": 287.7,
+        "whse": "MSK-CD"
+    }
+]
