@@ -41,7 +41,7 @@ class MoskvorechieController extends CommonParentController
         return [
             'l' => $this->partnerModelData->login,
             'p' => $this->partnerModelData->ext_key,
-            'act' => 'brand_by_nr',
+            'act' => 'price_by_nr_firm',
             'cs' => 'utf8',
             'nr' => $this->getFirstArticleFromQuery($query),
         ];
