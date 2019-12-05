@@ -14,7 +14,12 @@ class PartkomController extends CommonParentController
         $headers = $this->prepareHeaders();
         $queryToGuzzle = $this->prepareQuery($query);
         $responseFromExtApi = $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
-        return $responseFromExtApi;
+        if (empty(json_decode($responseFromExtApi))) {
+            return '';
+        } else {
+            $responseStringToFront = $this->responseStringCreate($responseFromExtApi);
+            return $responseStringToFront;
+        }
     }
 
     public function prepareUrl()
@@ -35,6 +40,23 @@ class PartkomController extends CommonParentController
     public function prepareQuery(string $query)
     {
         return ['number' => $this->getFirstArticleFromQuery($query)];
+    }
+
+    public function unicodeJsonConvert(string $jsonString = ''): string //unicode correction
+    {
+        return json_encode(json_decode($jsonString, true), JSON_UNESCAPED_UNICODE);
+    }
+
+    public function responseStringCreate(string $jsonFromPartnerApi = ''): string
+    {
+        
+        $jsonFromPartnerApi = $this->unicodeJsonConvert($jsonFromPartnerApi);
+        $arrayFromPartnerApi = json_decode($jsonFromPartnerApi, true); //
+        $responseArray = $arrayFromPartnerApi;
+        
+        $responseString = json_encode($responseArray, JSON_UNESCAPED_UNICODE);
+        //return $responseString; 
+        return $jsonFromPartnerApi;
     }
 
 }
