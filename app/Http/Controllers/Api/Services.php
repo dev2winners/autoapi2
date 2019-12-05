@@ -13,6 +13,7 @@ class Services extends Controller
         '2' => 'Berg',
         '3' => 'Moskvorechie',
         '4' => 'Forumauto',
+        '5' => 'Mparts',
     ];
 
     public function getPartner($partnerid = null): object
