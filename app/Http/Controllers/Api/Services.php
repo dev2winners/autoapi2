@@ -11,6 +11,7 @@ class Services extends Controller
     private $partners = [
         '1' => 'Partkom',
         '2' => 'Berg',
+        '3' => 'Moskvorechie',
     ];
 
     public function getPartner($partnerid = null): object

@@ -66,8 +66,8 @@ class PartkomController extends CommonParentController
     public function responseStringCreate(string $jsonFromPartnerApi = ''): string
     {
         
-        //$jsonFromPartnerApi = $this->unicodeJsonConvert($jsonFromPartnerApi);
-        $jsonFromPartnerApi = file_get_contents(app_path() . '/TEMP/Partkom.json');
+        $jsonFromPartnerApi = $this->unicodeJsonConvert($jsonFromPartnerApi);
+        //$jsonFromPartnerApi = file_get_contents(app_path() . '/TEMP/Partkom.json');
         $arrayOffers = $arrayFromPartnerApi = json_decode($jsonFromPartnerApi, true); //
         
         //return json_encode($arrayOffers, JSON_UNESCAPED_UNICODE);
