@@ -14,6 +14,7 @@ class PartkomController extends CommonParentController
         $headers = $this->prepareHeaders();
         $queryToGuzzle = $this->prepareQuery($query);
         $responseFromExtApi = $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
+        //return $responseFromExtApi;
         if (empty(json_decode($responseFromExtApi))) {
             return '';
         } else {

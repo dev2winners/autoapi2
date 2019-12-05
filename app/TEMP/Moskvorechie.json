@@ -1,0 +1,27 @@
+{
+    "result": [{
+            "nr": "W811/80",
+            "brand": "Mann-filter",
+            "name": "Фильтр масляный HYUNDAI/KIA/MAZDA/MITSUBISHI",
+            "stock": "685",
+            "sorder": "0",
+            "delivery": "1 день",
+            "minq": "1",
+            "upd": "05.12.19 17:14",
+            "price": "179.00",
+            "currency": "руб."
+        },
+        {
+            "nr": "W811/80",
+            "brand": "Mann-filter",
+            "name": "Фильтр масляный HYUNDAI/KIA/MAZDA/MITSUBISHI",
+            "stock": "774",
+            "sorder": "0",
+            "delivery": "на складе",
+            "minq": "1",
+            "upd": "05.12.19 16:54",
+            "price": "180.00",
+            "currency": "руб."
+        }
+    ]
+}

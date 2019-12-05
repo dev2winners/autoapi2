@@ -14,13 +14,13 @@ class MoskvorechieController extends CommonParentController
         $headers = $this->prepareHeaders();
         $queryToGuzzle = $this->prepareQuery($query);
         $responseFromExtApi = $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
-        return $responseFromExtApi;
-        if (empty(json_decode($responseFromExtApi)->resources)) {
+        //return $responseFromExtApi;
+        if (empty(json_decode($responseFromExtApi)->result)) {
             return '';
         } else {
             $responseStringToFront = $this->responseStringCreate($responseFromExtApi);
             return $responseStringToFront;
-        } 
+        }
         //return 'MoskvorechieController';
     }
 
@@ -45,5 +45,37 @@ class MoskvorechieController extends CommonParentController
             'cs' => 'utf8',
             'nr' => $this->getFirstArticleFromQuery($query),
         ];
+    }
+
+    private function responseObjectCreate(array $arrayFromPartnerApi = [], int $indexOfArray = 0): object
+    {
+        $responseArray['article'] = $arrayFromPartnerApi['nr'];
+        $responseArray['brand'] = $arrayFromPartnerApi['brand'];
+        $responseArray['name'] = $arrayFromPartnerApi['name'];
+        $responseArray['price'] = $this->convertPrice((float) $arrayFromPartnerApi['price']);
+        $responseArray['quantity'] = $arrayFromPartnerApi['stock'];
+        $responseArray['delivery_days'] = $this->convertDeliveryDays((int) $arrayFromPartnerApi['delivery']);
+        $responseArray['comment'] = '';
+        $responseArray['partner'] = $this->partnerModelData->id;
+
+        $responseObject = (object) $responseArray;
+        return $responseObject;
+    }
+
+    public function responseStringCreate(string $jsonFromPartnerApi = ''): string
+    {
+        // return $jsonFromPartnerApi;
+        $arrayFromPartnerApi = json_decode($jsonFromPartnerApi, true); //
+        $arrayOffers = $arrayFromPartnerApi['result'];
+        //var_dump($arrayFromPartnerApi['result']);
+        $responseArray = [];
+        $responseString = '';
+
+        foreach ($arrayOffers as $key => $value) {
+            $responseArray[] = $this->responseObjectCreate($value, $key);
+        }
+
+        $responseString = json_encode($responseArray, JSON_UNESCAPED_UNICODE);
+        return $responseString;
     }
 }
