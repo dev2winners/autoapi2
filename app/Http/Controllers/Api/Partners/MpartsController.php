@@ -75,7 +75,7 @@ class MpartsController extends CommonParentController
 
     public function responseStringCreate(string $jsonFromPartnerApi = ''): string
     {
-        return $jsonFromPartnerApi;
+        //return $jsonFromPartnerApi;
         $arrayFromPartnerApi = json_decode($jsonFromPartnerApi, true); //
         $arrayOffers = $arrayFromPartnerApi;
         //var_dump($arrayOffers);
@@ -88,5 +88,20 @@ class MpartsController extends CommonParentController
 
         $responseString = json_encode($responseArray, JSON_UNESCAPED_UNICODE);
         return $responseString;
+    }
+
+    private function responseObjectCreate(array $arrayFromPartnerApi = [], int $indexOfArray = 0): object
+    {
+        $responseArray['article'] = $arrayFromPartnerApi['number'];
+        $responseArray['brand'] = $arrayFromPartnerApi['brand'];
+        $responseArray['name'] = $arrayFromPartnerApi['original_article'];
+        $responseArray['price'] = $this->convertPrice((float) $arrayFromPartnerApi['price']);
+        $responseArray['quantity'] = $arrayFromPartnerApi['availability'];
+        $responseArray['delivery_days'] = $this->convertDeliveryDays((int) (($arrayFromPartnerApi['deliveryPeriod']+24)/24));
+        $responseArray['comment'] = '';
+        $responseArray['partner'] = $this->partnerModelData->id;
+
+        $responseObject = (object) $responseArray;
+        return $responseObject;
     }
 }
