@@ -48,7 +48,12 @@ class MpartsController extends CommonParentController
         $headers = $this->prepareHeaders();
         $queryToGuzzle = $this->prepareQuery($query);
         $jsonFromMpartsSearchBrands = $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
-        $brand = $this->getBrands($jsonFromMpartsSearchBrands)[0];
+        //exit($jsonFromMpartsSearchBrands);
+        if (!empty(json_decode($jsonFromMpartsSearchBrands))) {
+            $brand = $this->getBrands($jsonFromMpartsSearchBrands)[0];
+        } else {
+            $brand = '';
+        }
         return $brand;
     }
 
@@ -97,7 +102,7 @@ class MpartsController extends CommonParentController
         $responseArray['name'] = $arrayFromPartnerApi['original_article'];
         $responseArray['price'] = $this->convertPrice((float) $arrayFromPartnerApi['price']);
         $responseArray['quantity'] = $arrayFromPartnerApi['availability'];
-        $responseArray['delivery_days'] = $this->convertDeliveryDays((int) (($arrayFromPartnerApi['deliveryPeriod']+24)/24));
+        $responseArray['delivery_days'] = $this->convertDeliveryDays((int) (($arrayFromPartnerApi['deliveryPeriod'] + 24) / 24));
         $responseArray['comment'] = '';
         $responseArray['partner'] = $this->partnerModelData->id;
 
