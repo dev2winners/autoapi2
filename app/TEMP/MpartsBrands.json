@@ -1,0 +1,16 @@
+{
+    "MANNw81180": {
+        "brand": "MANN",
+        "number": "w81180",
+        "numberFix": "w81180",
+        "description": "Фильтр масляный MANN W 811\/80 MANN W 811\/80",
+        "availability": false
+    },
+    "MANN-FILTERw81180": {
+        "brand": "MANN-FILTER",
+        "number": "w81180",
+        "numberFix": "w81180",
+        "description": "Фильтр масляный HYUNDAI\/KIA\/MAZDA\/MITSUBISHI",
+        "availability": false
+    }
+}
