@@ -11,8 +11,8 @@ class ShatemController extends CommonParentController
         //return $this->getToken();
         $article = $this->getFirstArticleFromQuery($query);
         $url = $this->prepareUrl();
-        //$URI = $this->prepareURI('api/search/GetPricesByArticle');
-        $URI = $this->prepareURI('api/search/GetTradeMarksByArticleCode/' . $article);
+        $URI = $this->prepareURI('api/search/GetPricesByArticle'); //not working
+        //$URI = $this->prepareURI('api/search/GetTradeMarksByArticleCode/' . $article); //its working
         $headers = $this->prepareHeaders();
         $queryToGuzzle = $this->prepareQuery($query);
         $responseFromExtApi = $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
@@ -43,7 +43,14 @@ class ShatemController extends CommonParentController
     public function prepareQuery(string $query)
     {
         return [
-            //'ArticleCode' => $this->getFirstArticleFromQuery($query),
+            /* 'ArticleCode' => 'Op595',
+            'TradeMarkName' => 'HJS',
+            'TradeMarkId' => '118',
+            'IncludeAnalogs' => false, ******* its working *******/ 
+            'ArticleCode' => 'Op595', //обязательный
+            'TradeMarkName' => 'HJS', //обязательный
+            'TradeMarkId' => '118', //обязательный
+            //'IncludeAnalogs' => false,
         ];
     }
 

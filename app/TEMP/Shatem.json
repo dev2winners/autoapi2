@@ -1,0 +1,24 @@
+{
+    "TradeMarkByArticleCodeModels": [{
+            "TradeMarkId": 118,
+            "TradeMarkName": "HJS",
+            "PartName": "Система выпуска ОГ"
+        },
+        {
+            "TradeMarkId": 254,
+            "TradeMarkName": "FILTRON",
+            "PartName": "Фильтр масляный"
+        },
+        {
+            "TradeMarkId": 555,
+            "TradeMarkName": "MITSUBISHI",
+            "PartName": "ФИЛЬТР МАСЛЯНЫЙ ДЛЯ СТЕНДА!!!!!!"
+        },
+        {
+            "TradeMarkId": 51958,
+            "TradeMarkName": "OEM",
+            "PartName": "ФИЛЬТР МАСЛЯНЫЙ HONDA/KIA//MAZDA/NISSAN/SUBARU (OP 595) FILTRON"
+        }
+    ],
+    "StatusCode": 200
+}
