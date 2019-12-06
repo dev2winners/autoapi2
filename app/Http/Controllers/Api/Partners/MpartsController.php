@@ -20,8 +20,8 @@ class MpartsController extends CommonParentController
             return '';
         }
         //return $responseFromExtApi;
-        //if (!empty(json_decode($responseFromExtApi)->errors)) {
-        if (false) {
+        if (empty(json_decode($responseFromExtApi))) {
+        //if (false) {
             return '';
         } else {
             $responseStringToFront = $this->responseStringCreate($responseFromExtApi);
