@@ -25,24 +25,30 @@ class ShatemController extends CommonParentController
         $URI = $this->prepareURI('api/search/GetPricesByArticle'); //
 
         $responseFromExtApi = '';
+        $resultArrayFromExtApi = [];
 
         foreach ($trademarks as $i => $trademark) {
             $queryToGuzzle = $this->QueryCreateForTradeMarks($trademark, $article, $i);
 
             $response = $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
-            if (!empty(json_decode($response, true)['PriceModels'])) {
-                $responseFromExtApi .= $response;
+            $responseArray = json_decode($response, true)['PriceModels'];
+            if (!empty($responseArray)) {
+                //$responseFromExtApi .= $response;
+                $resultArrayFromExtApi = array_merge($resultArrayFromExtApi, $responseArray);
             }
         }
+        
+        $responseToFront = $this->createFinalResponse($resultArrayFromExtApi);
+        
+        $responseToFront = json_encode($responseToFront, JSON_UNESCAPED_UNICODE);
+        return $responseToFront;
 
-        return $responseFromExtApi;
-        if (!empty(json_decode($responseFromExtApi)->errors)) {
-            //if (false) {
+        /* if (false) {
             return '';
         } else {
             $responseStringToFront = $this->responseStringCreate($responseFromExtApi);
             return $responseStringToFront;
-        }
+        } */
         //return 'ShatemController';
     }
 
@@ -89,6 +95,28 @@ class ShatemController extends CommonParentController
         return $query;
     }
 
+    public function createFinalResponse(array $dataFromExtApi): array
+    {
+        $result = [];
+
+        foreach ($dataFromExtApi as $brand) {
+            foreach ($brand['ArticlePriceInfo'] as $offer) {
+
+                $a['article'] = $brand['ArticleCode'];
+                $a['brand'] = $brand['TradeMarkName'];
+                $a['name'] = $brand['TradeMarkName'] . ' ' . $brand['ArticleCode'];
+                $a['price'] = $this->convertPrice((float) $offer['Price']);
+                $a['quantity'] = $offer['Qty'];
+                $a['delivery_days'] = $this->convertDeliveryDays((int) $offer['DeliveryTerm']);
+                $a['comment'] = '';
+                $a['partner'] = $this->partnerModelData->id;
+
+                $o = (object) $a;
+                $result[] = $o;
+            }
+        }
+        return $result;
+    }
     public function getToken()
     {
         $ch_url = $this->prepareUrl();
