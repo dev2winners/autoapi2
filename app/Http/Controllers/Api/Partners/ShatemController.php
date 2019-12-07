@@ -21,12 +21,16 @@ class ShatemController extends CommonParentController
         $headers = $this->prepareHeaders();
         
         $TradeMarksByArticleCode = $this->GetTradeMarksByArticleCode($url, $article, $headers);
-        $queryToGuzzle = $this->prepareQuery($query);
-        $queryToGuzzle = $this->QueryUpdateForTradeMarks($this->GetTradeMarksFromJson($TradeMarksByArticleCode), $queryToGuzzle, $article);
-        
+        $trademarks = $this->GetTradeMarksFromJson($TradeMarksByArticleCode);
         $URI = $this->prepareURI('api/search/GetPricesByArticle'); //
+        
+        $responseFromExtApi = '';
 
-        $responseFromExtApi = $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
+        foreach($trademarks as $key => $value) {
+        $queryToGuzzle = $this->QueryCreateForTradeMarks($trademarks, $article, $key);
+        $responseFromExtApi .= $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
+        }
+
         return $responseFromExtApi;
         if (!empty(json_decode($responseFromExtApi)->errors)) {
             //if (false) {
@@ -72,12 +76,12 @@ class ShatemController extends CommonParentController
         return $trademarks;
     }
 
-    public function QueryUpdateForTradeMarks(array $trademarks, array $query, string $article) : array
+    public function QueryCreateForTradeMarks(array $trademarks, string $article, $i) : array
     {
-        exit(print_r($trademarks));
+        //exit(print_r($trademarks));
         $query['ArticleCode'] = $article;
-        $query['TradeMarkName'] = $trademarks[0]['TradeMarkName']; //working for 'Op595' on index [1]
-        $query['TradeMarkId'] = $trademarks[0]['TradeMarkId'];
+        $query['TradeMarkName'] = $trademarks[$i]['TradeMarkName']; //working for 'Op595' on index [1]
+        $query['TradeMarkId'] = $trademarks[$i]['TradeMarkId'];
         $query['IncludeAnalogs'] = false;
         return $query;
     }
