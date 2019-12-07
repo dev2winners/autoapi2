@@ -37,18 +37,17 @@ class ShatemController extends CommonParentController
                 $resultArrayFromExtApi = array_merge($resultArrayFromExtApi, $responseArray);
             }
         }
-        
-        $responseToFront = $this->createFinalResponse($resultArrayFromExtApi);
-        
-        $responseToFront = json_encode($responseToFront, JSON_UNESCAPED_UNICODE);
-        return $responseToFront;
 
-        /* if (false) {
+        $responseToFront = $this->createFinalResponse($resultArrayFromExtApi);
+
+        if (empty($responseToFront)) {
             return '';
         } else {
-            $responseStringToFront = $this->responseStringCreate($responseFromExtApi);
-            return $responseStringToFront;
-        } */
+            $responseToFront = json_encode($responseToFront, JSON_UNESCAPED_UNICODE);
+            return $responseToFront;
+            /* $responseStringToFront = $this->responseStringCreate($responseFromExtApi);
+            return $responseStringToFront; */
+        }
         //return 'ShatemController';
     }
 
