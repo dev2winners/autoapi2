@@ -19,12 +19,13 @@ class ShatemController extends CommonParentController
         $article = $this->getFirstArticleFromQuery($query);
         $url = $this->prepareUrl();
         $headers = $this->prepareHeaders();
-        $TradeMarksByArticleCode = $this->GetTradeMarksByArticleCode($url, $article, $headers);
-        return $TradeMarksByArticleCode;
         
-        $URI = $this->prepareURI('api/search/GetPricesByArticle'); //working with ArticleCode,TradeMarkName, and TradeMarkId, only
-        //$URI = $this->prepareURI('api/search/GetTradeMarksByArticleCode/' . $article); //its working
+        $TradeMarksByArticleCode = $this->GetTradeMarksByArticleCode($url, $article, $headers);
         $queryToGuzzle = $this->prepareQuery($query);
+        $queryToGuzzle = $this->QueryUpdateForTradeMarks($this->GetTradeMarksFromJson($TradeMarksByArticleCode), $queryToGuzzle, $article);
+        
+        $URI = $this->prepareURI('api/search/GetPricesByArticle'); //
+
         $responseFromExtApi = $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
         return $responseFromExtApi;
         if (!empty(json_decode($responseFromExtApi)->errors)) {
@@ -52,11 +53,8 @@ class ShatemController extends CommonParentController
 
     public function prepareQuery(string $query)
     {
-        return [
-            /* 'ArticleCode' => 'Op595', //обязательный
-            'TradeMarkName' => 'HJS', //обязательный
-            'TradeMarkId' => '118', //обязательный
-            //'IncludeAnalogs' => false, */];
+        return [];
+            
     }
 
 
@@ -66,6 +64,22 @@ class ShatemController extends CommonParentController
         $query = [];
         $responseFromExtApi = $this->doGuzzle($url, $URI, $headers, $query);
         return $responseFromExtApi;
+    }
+
+    public function GetTradeMarksFromJson(string $json) : array
+    {
+        $trademarks = json_decode($json, true)['TradeMarkByArticleCodeModels'];
+        return $trademarks;
+    }
+
+    public function QueryUpdateForTradeMarks(array $trademarks, array $query, string $article) : array
+    {
+        //exit(print_r($trademarks));
+        $query['ArticleCode'] = $article;
+        $query['TradeMarkName'] = $trademarks[0]['TradeMarkName']; //working for 'Op595' on index [1]
+        $query['TradeMarkId'] = $trademarks[0]['TradeMarkId'];
+        $query['IncludeAnalogs'] = false;
+        return $query;
     }
 
     public function getToken()
