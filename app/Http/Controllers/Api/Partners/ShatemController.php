@@ -19,16 +19,20 @@ class ShatemController extends CommonParentController
         $article = $this->getFirstArticleFromQuery($query);
         $url = $this->prepareUrl();
         $headers = $this->prepareHeaders();
-        
+
         $TradeMarksByArticleCode = $this->GetTradeMarksByArticleCode($url, $article, $headers);
         $trademarks = $this->GetTradeMarksFromJson($TradeMarksByArticleCode);
         $URI = $this->prepareURI('api/search/GetPricesByArticle'); //
-        
+
         $responseFromExtApi = '';
 
-        foreach($trademarks as $key => $value) {
-        $queryToGuzzle = $this->QueryCreateForTradeMarks($trademarks, $article, $key);
-        $responseFromExtApi .= $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
+        foreach ($trademarks as $i => $trademark) {
+            $queryToGuzzle = $this->QueryCreateForTradeMarks($trademark, $article, $i);
+
+            $response = $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
+            if (!empty(json_decode($response, true)['PriceModels'])) {
+                $responseFromExtApi .= $response;
+            }
         }
 
         return $responseFromExtApi;
@@ -58,7 +62,6 @@ class ShatemController extends CommonParentController
     public function prepareQuery(string $query)
     {
         return [];
-            
     }
 
 
@@ -70,18 +73,18 @@ class ShatemController extends CommonParentController
         return $responseFromExtApi;
     }
 
-    public function GetTradeMarksFromJson(string $json) : array
+    public function GetTradeMarksFromJson(string $json): array
     {
         $trademarks = json_decode($json, true)['TradeMarkByArticleCodeModels'];
         return $trademarks;
     }
 
-    public function QueryCreateForTradeMarks(array $trademarks, string $article, $i) : array
+    public function QueryCreateForTradeMarks(array $trademark, string $article, $i): array
     {
         //exit(print_r($trademarks));
         $query['ArticleCode'] = $article;
-        $query['TradeMarkName'] = $trademarks[$i]['TradeMarkName']; //working for 'Op595' on index [1]
-        $query['TradeMarkId'] = $trademarks[$i]['TradeMarkId'];
+        $query['TradeMarkName'] = $trademark['TradeMarkName']; //working for 'Op595' on index [1]
+        $query['TradeMarkId'] = $trademark['TradeMarkId'];
         $query['IncludeAnalogs'] = false;
         return $query;
     }
