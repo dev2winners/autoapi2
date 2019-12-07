@@ -74,7 +74,7 @@ class ShatemController extends CommonParentController
 
     public function QueryUpdateForTradeMarks(array $trademarks, array $query, string $article) : array
     {
-        //exit(print_r($trademarks));
+        exit(print_r($trademarks));
         $query['ArticleCode'] = $article;
         $query['TradeMarkName'] = $trademarks[0]['TradeMarkName']; //working for 'Op595' on index [1]
         $query['TradeMarkId'] = $trademarks[0]['TradeMarkId'];
