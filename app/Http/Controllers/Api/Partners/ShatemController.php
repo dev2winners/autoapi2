@@ -6,14 +6,24 @@ use App\Http\Controllers\Api\Partners\CommonParentController;
 
 class ShatemController extends CommonParentController
 {
+    public $token = '';
+
+    public function init()
+    {
+        $this->token = $this->getToken();
+    }
+
     public function main($query)
     {
-        //return $this->getToken();
+        $this->init();
         $article = $this->getFirstArticleFromQuery($query);
         $url = $this->prepareUrl();
-        $URI = $this->prepareURI('api/search/GetPricesByArticle'); //not working
-        //$URI = $this->prepareURI('api/search/GetTradeMarksByArticleCode/' . $article); //its working
         $headers = $this->prepareHeaders();
+        $TradeMarksByArticleCode = $this->GetTradeMarksByArticleCode($url, $article, $headers);
+        return $TradeMarksByArticleCode;
+        
+        $URI = $this->prepareURI('api/search/GetPricesByArticle'); //working with ArticleCode,TradeMarkName, and TradeMarkId, only
+        //$URI = $this->prepareURI('api/search/GetTradeMarksByArticleCode/' . $article); //its working
         $queryToGuzzle = $this->prepareQuery($query);
         $responseFromExtApi = $this->doGuzzle($url, $URI, $headers, $queryToGuzzle);
         return $responseFromExtApi;
@@ -36,22 +46,26 @@ class ShatemController extends CommonParentController
     {
         return [
             'Accept' => 'application/json',
-            'Token' => $this->getToken(),
+            'Token' => $this->token,
         ];
     }
 
     public function prepareQuery(string $query)
     {
         return [
-            /* 'ArticleCode' => 'Op595',
-            'TradeMarkName' => 'HJS',
-            'TradeMarkId' => '118',
-            'IncludeAnalogs' => false, ******* its working *******/ 
-            'ArticleCode' => 'Op595', //обязательный
+            /* 'ArticleCode' => 'Op595', //обязательный
             'TradeMarkName' => 'HJS', //обязательный
             'TradeMarkId' => '118', //обязательный
-            //'IncludeAnalogs' => false,
-        ];
+            //'IncludeAnalogs' => false, */];
+    }
+
+
+    public function GetTradeMarksByArticleCode($url, $article, $headers)
+    {
+        $URI = $this->prepareURI('api/search/GetTradeMarksByArticleCode/' . $article);
+        $query = [];
+        $responseFromExtApi = $this->doGuzzle($url, $URI, $headers, $query);
+        return $responseFromExtApi;
     }
 
     public function getToken()
